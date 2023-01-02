@@ -1,4 +1,4 @@
-# PYTHON
+# Python - Estudos
 
 Esse repositório contém exercícios na linguagem python.
 
