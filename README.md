@@ -12,6 +12,7 @@ São exercícios para praticar conceitos básicos do python dentro na minha tril
 2 - Casa de Cambio = Sistema que informa a cotação atualizada do Dólar, Euro e Libra e simula quanto é possível comprar de cada moeda encima do valor informado em Real.
 
 3 - Análide de Dados (Case Acadêmico)  = Análise de dados sobre ingresso de mulheres no ensino superior no curso de ciências de dados, para cumprir a avaliação da disciplina "MOD. D - FUNDAMENTOS EM DATA SCIENCE E ANÁLISE ESTATÍSTICA DE DADOS" no 2º período do Superior de Tecnologia em Data Science na UNINASSAU.
+
 OBJETIVO: Utilizar dados abertos para elaborar o seu texto argumentativo-dissertativo e responde aos seguintes questionamentos:
 • Os dados de origem (de onde partiu); 
 
