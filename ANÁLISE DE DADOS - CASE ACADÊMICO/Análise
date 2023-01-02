@@ -1,0 +1,90 @@
+import pandas as pd
+
+base2020 = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/MICRODADOS CADASTRO CURSOS 2020.CSV', sep=';', encoding='latin1', usecols=['NU_ANO_CENSO', 'NO_REGIAO', 'NO_CURSO', 'QT_ING_FEM','QT_ING_MASC'])
+base2021 = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/MICRODADOS CADASTRO CURSOS 2021.CSV', sep=';', encoding='latin1', usecols=['NU_ANO_CENSO','NO_REGIAO', 'NO_CURSO', 'QT_ING_FEM','QT_ING_MASC'])
+analise = pd.concat([base2020,base2021])
+
+display(analise)
+
+analise_limpa = analise = analise.dropna()
+analise_limpa = analise[analise['NO_CURSO'] =='CIÊNCIA DE DADOS']
+display(analise_limpa)
+
+analise_qtda = analise_limpa.groupby('NO_REGIAO')[['QT_ING_FEM','QT_ING_MASC']].agg(['sum', 'mean'])
+analise_qtda.round(2)
+
+analise_fem = analise_limpa.groupby(['NU_ANO_CENSO','NO_REGIAO'])['QT_ING_FEM'].sum()
+Fem = [analise_fem.filter(like='Centro-Oeste').diff()/50*100], [analise_fem.filter(like='Nordeste').diff()/51*100],[analise_fem.filter(like='Norte').diff()/17*100], [analise_fem.filter(like='Sudeste').diff()/1246*100], [analise_fem.filter(like='Sul').diff()/128*100]
+display(analise_fem, Fem)
+
+
+
+analise_masc = analise_limpa.groupby(['NU_ANO_CENSO','NO_REGIAO'])['QT_ING_MASC'].sum()
+Masc = [analise_masc.filter(like='Centro-Oeste').diff()/165*100], [analise_masc.filter(like='Nordeste').diff()/250*100],[analise_masc.filter(like='Norte').diff()/79*100], [analise_masc.filter(like='Sudeste').diff()/3943*100], [analise_masc.filter(like='Sul').diff()/398*100]
+display(analise_masc, Masc)
+
+import matplotlib.pyplot as plt
+
+analise_conciliadafem = {
+                         
+    'REGIÃO': ['Centro-Oeste', 'Nordeste', 'Norte','Sudeste', 'Sul'],
+
+    'CRESCIMENTO FEMININO (%)': [96.00, 109.80, 123.52,36.59,57.03],}
+
+resultado_fem = pd.DataFrame(analise_conciliadafem)
+
+graficofem = resultado_fem[['CRESCIMENTO FEMININO (%)']].plot(figsize=(8,5), color = 'deeppink', kind='bar')
+graficofem.set_xticklabels(resultado_fem['REGIÃO'])
+
+resultado_fem.set_index(['REGIÃO'], inplace=True)
+
+print(resultado_fem) 
+
+analise_conciliadamasc = {
+                         
+    'REGIÃO': ['Centro-Oeste', 'Nordeste', 'Norte','Sudeste', 'Sul'],
+
+    'CRESCIMENTO MASCULINO (%)': [96.96, 79.60, 63.29,19.09,30.90],}
+
+resultado_masc = pd.DataFrame(analise_conciliadamasc)
+
+graficomasc = resultado_masc[['CRESCIMENTO MASCULINO (%)']].plot(figsize=(8,5), color = 'blue', kind='bar')
+graficomasc.set_xticklabels(resultado_masc['REGIÃO'])
+
+resultado_masc.set_index(['REGIÃO'], inplace=True)
+
+print(resultado_masc)
+
+
+
+conciliado = {
+                         
+    'REGIÃO': ['Centro-Oeste', 'Nordeste', 'Norte','Sudeste', 'Sul'],
+
+    'CRESCIMENTO FEMININO (%)': [96.00, 109.80, 123.52,36.59,57.03],
+
+    'CRESCIMENTO MASCULINO (%)': [96.96, 79.60, 63.29,19.09,30.90],}
+
+analise_final = pd.DataFrame(conciliado)
+
+graficoconc = analise_final[['CRESCIMENTO FEMININO (%)','CRESCIMENTO MASCULINO (%)']].plot(figsize=(8,5), color = ['deeppink', 'blue'], kind='bar')
+graficoconc.set_xticklabels(analise_final['REGIÃO'])
+
+analise_final.set_index(['REGIÃO'], inplace=True)
+
+print(analise_final)
+
+
+media_fem = resultado_fem['CRESCIMENTO FEMININO (%)'].mean().round(2)
+media_masc = resultado_masc['CRESCIMENTO MASCULINO (%)'].mean().round(2)
+
+analise_mdfinal = pd.DataFrame([media_fem, media_masc])
+analise_mdfinal.rename(columns={0: 'MEDIA(%)'}, inplace = True)
+analise_mdfinal.rename(index={0:'FEMININO', 1:'MASCULINO'} , inplace = True)
+print(analise_mdfinal)
+
+graficomed = analise_mdfinal['MEDIA(%)'].plot(figsize=(8,5), color = ['pink', 'skyblue'], kind='bar')
+
+print('A média do crescimento do ingresso FEMININO em ensino superior no curso de Ciências de Dados no ano de 2021 foi de:',media_fem, '%')
+print('A média do crescimento do ingresso MASCULINO em ensino superior no curso de Ciências de Dados no ano de 2021 foi de:',media_masc, '%')
+print('Em 2021 o ingresso foi de: {:.2f}'.format(media_fem-media_masc),'% maior para as mulheres na aréa de dad
